@@ -1,5 +1,9 @@
 import { initExpressServer, startListening } from './express';
 
-export function applicationServerDoesNotExist() {
-	return startListening(initExpressServer());
+import { initDevMiddleware } from './webpack';
+
+export async function applicationServer() {
+	return initExpressServer()
+		.then(initDevMiddleware)
+		.then(startListening);
 }

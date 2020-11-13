@@ -1,20 +1,9 @@
 import path from 'path';
 import webpack from 'webpack';
-
-// import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-
-// // type Modify<T, R> = Pick<T, Exclude<keyof T, keyof R>> & R;
-// // type MyWebpackConfiguration = Modify<
-// // 	webpack.Configuration,
-// // 	{
-// // 		output: webpack.Output;
-// // 		module: webpack.Module;
-// // 	}
-// // >;
+import WebpackNodeExternals from 'webpack-node-externals';
 
 export interface CustomWebpackConfiguration extends webpack.Configuration {
 	name: '' | 'server' | 'client';
-	// output: typeof webpack.Configuration.output;
 	plugins: webpack.WebpackPluginInstance[] /* we know we use a plugin array */;
 }
 
@@ -101,9 +90,8 @@ export default function (env: CustomProcessEnv = process.env): CustomWebpackConf
 			// server-specific configuration
 			...base,
 			name: 'server',
-			externals: [],
-			// entry: is_production ? ['./src/server/index.prod.ts'] : ['./src/server/serverRenderer.ts'],
-			entry: './src/server/index.ts',
+			externals: [WebpackNodeExternals()],
+			entry: is_production ? ['./src/server/index.prod.ts'] : ['./src/server/serverRenderer.ts'],
 			target: 'node',
 			output: {
 				...base.output,

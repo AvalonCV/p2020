@@ -4,7 +4,8 @@ export const initExpressServer = () => {
 	const app = express();
 	app.disable('x-powered-by');
 
-	return app;
+	return Promise.resolve(app);
+
 };
 
 export const startListening = (app: express.Express) => {
@@ -12,5 +13,5 @@ export const startListening = (app: express.Express) => {
 	app.listen(port, () => {
 		console.log(`App is listening on port ${port}.`);
 	});
-	return app;
+	return Promise.resolve(app);
 };

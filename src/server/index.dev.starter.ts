@@ -1,5 +1,5 @@
 import webpack from 'webpack';
-import { fs } from 'memfs';
+import { createFsFromVolume, Volume } from 'memfs';
 
 import getWebpackConfiguration from './../../webpack.config';
 
@@ -14,22 +14,39 @@ const server_configuration = getWebpackConfiguration(process.env).filter((elemen
 	}
 })[0];
 
+interface ErrorWithDetails extends Error {
+	details?: string
+}
+
 function runApplicationServerFromMemory(compiler: webpack.Compiler) {
 	// Compile to in-memory file system.
+	const fs = createFsFromVolume(new Volume());
 	// tslint:disable-next-line: no-any
 	compiler.outputFileSystem = fs as any; // sigh, writeFile types do _somehow_ not match!
 
-	compiler.run((err, stats) => {
+	compiler.run((err: ErrorWithDetails | undefined, stats) => {
+
 		if (err) {
-			throw err;
-		}
-		if (stats && stats.hasErrors()) {
-			const errors = stats.compilation ? stats.compilation.errors : null;
-			if (errors) {
-				errors.forEach((error) => console.error(error.message));
+			console.error(err.stack || err);
+			if (err.details) {
+				console.error(err.details);
 			}
-			throw errors;
+			return;
 		}
+
+		if (stats) {
+			const info = stats.toJson();
+
+			if (stats.hasErrors()) {
+				console.error('Errors', info.errors);
+			}
+
+			// if (stats.hasWarnings()) {
+			// 	console.warn('Warnings', info.warnings);
+			// }
+		}
+
+		// Log result...
 
 		if (server_configuration.output) {
 			const { path, filename } = server_configuration.output;
