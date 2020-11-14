@@ -104,7 +104,7 @@ export default function (env: CustomProcessEnv = process.env): CustomWebpackConf
 			// client-specific configuration
 			...base,
 			name: 'client',
-			entry: is_production ? ['./src/app/index.tsx'] : ['webpack-hot-middleware', './src/app/index.tsx'],
+			entry: is_production ? ['./src/app/index.tsx'] : ['webpack-hot-middleware/client', './src/app/index.tsx'],
 			target: 'web',
 			output: {
 				...base.output,

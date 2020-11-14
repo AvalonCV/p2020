@@ -16,6 +16,7 @@ const getWebpackScriptAssets = (res: Response) => {
     if (is_production) {
         assets.push('public/js/client.js');
     } else {
+
         const webpackStats: webpack.Stats[] = res.locals.webpack.devMiddleware.stats.stats;
         // console.log('response', res.locals.webpack.devMiddleware.stats, webpackStats, res.locals.webpack.devMiddleware.stats.stats)
 
@@ -27,7 +28,7 @@ const getWebpackScriptAssets = (res: Response) => {
             .forEach(element => {
                 for (let asset in element.compilation.assets) {
                     if (element.compilation.assets.hasOwnProperty(asset)) {
-                        asset.endsWith('.js') && assets.push(asset);
+                        asset.endsWith('.js') && !asset.endsWith('.hot-update.js') && assets.push(asset);
                     }
                 }
             });

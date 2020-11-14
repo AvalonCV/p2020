@@ -4,7 +4,6 @@ import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware = require('webpack-hot-middleware');
 import webpackHotServerMiddleware from 'webpack-hot-server-middleware';
 
-
 import getWebpackConfiguration, { CustomWebpackConfiguration } from '../../../webpack.config';
 
 export const getWebpackConfigurationOfType = (
@@ -42,7 +41,7 @@ export const initDevMiddleware = (app: express.Express) => {
 
 	// NOTE: Only the client bundle needs to be passed to`webpack-hot-middleware`.
 	if (client_compiler) {
-		app.use(webpackHotMiddleware(client_compiler));
+		app.use(webpackHotMiddleware(client_compiler, {}));
 	}
 	app.use(webpackHotServerMiddleware(compiler));
 
