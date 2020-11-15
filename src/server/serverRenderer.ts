@@ -7,6 +7,10 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { App } from './../app/App';
 
+import { createRenderer, } from 'fela';
+import { renderToMarkup } from 'fela-dom';
+import normalize_css from './../app/css/normalize.8.0.1.css';
+import core_css from './../app/css/core.css';
 
 const is_production = process.env.NODE_ENV === 'production';
 
@@ -17,8 +21,8 @@ const getWebpackScriptAssets = (res: Response) => {
         assets.push('public/js/client.js');
     } else {
 
+        // better do it like 'https://github.com/webpack/webpack/issues/10790#issuecomment-620647237'
         const webpackStats: webpack.Stats[] = res.locals.webpack.devMiddleware.stats.stats;
-        // console.log('response', res.locals.webpack.devMiddleware.stats, webpackStats, res.locals.webpack.devMiddleware.stats.stats)
 
         webpackStats
             .filter(element => {
@@ -54,9 +58,12 @@ const printWebpackScriptAssets = (response: Response) => {
 export default function serverRenderer() {
     return function (_req: Request, res: Response, _next: NextFunction) {
 
+        const fela_renderer = createRenderer({
+            devMode: !is_production
+        });
+        fela_renderer.renderStatic(normalize_css + ' ' + core_css);
 
-        const content = ReactDOMServer.renderToString(React.createElement(App, {}));
-
+        const content = ReactDOMServer.renderToString(React.createElement(App, { fela_renderer }));
 
         let response = `
             <!DOCTYPE html>
@@ -66,6 +73,8 @@ export default function serverRenderer() {
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                 <meta name="theme-color" content="#1d3c8d">
+
+                ${renderToMarkup(fela_renderer)}
             </head>
             <body>
                 <div class="main_root" id="root">${content}</div>

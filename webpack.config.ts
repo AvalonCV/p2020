@@ -56,14 +56,14 @@ export default function (env: CustomProcessEnv = process.env): CustomWebpackConf
 				// 		}
 				// 	]
 				// },
-				// {
-				// 	test: /\.(css|md)$/,
-				// 	use: [
-				// 		{
-				// 			loader: 'raw-loader'
-				// 		}
-				// 	]
-				// },
+				{
+					test: /\.(css|md)$/,
+					use: [
+						{
+							loader: 'raw-loader'
+						}
+					]
+				}
 				// {
 				// 	test: /\.(graphql|gql)$/,
 				// 	exclude: /node_modules/,
