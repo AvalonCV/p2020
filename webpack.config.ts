@@ -2,6 +2,13 @@ import path from 'path';
 import webpack from 'webpack';
 import WebpackNodeExternals from 'webpack-node-externals';
 
+import querystring from 'querystring';
+
+// const favicon_loader = require(path.resolve(process.cwd(), 'node_modules/favicons-webpack-plugin/src/loader.js'));
+// console.log('favicon_loader', favicon_loader);
+// import { convertWebpackFaviconsToMarkupPlugin } from './src/server/webpack/convertWebpackFaviconsToMarkupPlugin';
+
+
 export interface CustomWebpackConfiguration extends webpack.Configuration {
 	name: '' | 'server' | 'client';
 	plugins: webpack.WebpackPluginInstance[] /* we know we use a plugin array */;
@@ -13,6 +20,7 @@ interface CustomProcessEnv extends NodeJS.ProcessEnv {
 
 export default function (env: CustomProcessEnv = process.env): CustomWebpackConfiguration[] {
 	const is_production = env.NODE_ENV === 'production';
+	const public_path = is_production ? '/public/' : '/';
 
 	const base: CustomWebpackConfiguration = {
 		mode: is_production ? 'production' : 'development',
@@ -23,11 +31,15 @@ export default function (env: CustomProcessEnv = process.env): CustomWebpackConf
 			filename: '',
 			// path needs to be an ABSOLUTE file path
 			path: path.resolve(process.cwd(), 'dist'),
-			publicPath: is_production ? '/public/' : '/',
+			publicPath: public_path
 		},
 		resolve: {
 			// Add '.ts' and '.tsx' as resolvable extensions.
 			extensions: ['.ts', '.tsx', '.js', '.json'],
+		},
+		resolveLoader: {
+			alias: { 'favicon-loader': path.resolve(process.cwd(), 'node_modules/favicons-webpack-plugin/src/loader.js') },
+			modules: ['node_modules']
 		},
 		module: {
 			rules: [
@@ -56,6 +68,19 @@ export default function (env: CustomProcessEnv = process.env): CustomWebpackConf
 				// 		}
 				// 	]
 				// },
+				{
+					test: /favicon\.png$/,
+					use: [{
+						loader: 'favicon-loader',
+						options: querystring.stringify({
+							path: '/',
+							outputPath: public_path,
+							prefix: '',
+							options: ''
+						})
+
+					}]
+				},
 				{
 					test: /\.(css|md)$/,
 					use: [
@@ -110,7 +135,11 @@ export default function (env: CustomProcessEnv = process.env): CustomWebpackConf
 				...base.output,
 				filename: 'client/js/client.js',
 			},
-			plugins: is_production ? base.plugins : [...base.plugins, new webpack.HotModuleReplacementPlugin()],
+
+			plugins: [
+				...base.plugins,
+				...(is_production ? [] : [new webpack.HotModuleReplacementPlugin()])
+			]
 		},
 	];
 }

@@ -7,6 +7,9 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { App } from './../app/App';
 
+import favicon from './../app/images/favicon.png';
+console.log('favicon', favicon);
+
 import { createRenderer, } from 'fela';
 import { renderToMarkup } from 'fela-dom';
 import normalize_css from './../app/css/normalize.8.0.1.css';
@@ -42,6 +45,21 @@ const getWebpackScriptAssets = (res: Response) => {
 };
 
 
+// const getWebpackFaviconAssets = (response: Response) => {
+//     const assets: string[] = [];
+
+//     if (is_production) {
+//     } else {
+//         // better do it like 'https://github.com/webpack/webpack/issues/10790#issuecomment-620647237'
+//         const webpackStats: webpack.Stats[] = response.locals.webpack.devMiddleware.stats.stats;
+
+//         console.log('webpackStats', webpackStats);
+//     }
+
+//     return assets;
+// };
+
+
 const printWebpackScriptAssets = (response: Response) => {
     return (
         getWebpackScriptAssets(response)
@@ -64,6 +82,8 @@ export default function serverRenderer() {
         fela_renderer.renderStatic(normalize_css + ' ' + core_css);
 
         const content = ReactDOMServer.renderToString(React.createElement(App, { fela_renderer }));
+
+        // getWebpackFaviconAssets(res);
 
         let response = `
             <!DOCTYPE html>

@@ -8,11 +8,33 @@
 			"name": "Debug current TypeScript file",
 			"type": "node",
 			"request": "launch",
-			"args": ["${relativeFile}"],
-			"runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+			"args": [
+				"${relativeFile}"
+			],
+			"runtimeArgs": [
+				"--nolazy",
+				"-r",
+				"ts-node/register"
+			],
 			"sourceMaps": true,
 			"cwd": "${workspaceRoot}",
 			"protocol": "inspector",
-		}
+		},
+		{
+			"name": "Start DEV server",
+			"type": "node",
+			"request": "launch",
+			"args": [
+				"src/server/index.dev.starter.ts"
+			],
+			"runtimeArgs": [
+				"--nolazy",
+				"-r",
+				"ts-node/register"
+			],
+			"sourceMaps": true,
+			"cwd": "${workspaceRoot}",
+			"protocol": "inspector",
+		},
 	]
 }

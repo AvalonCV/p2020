@@ -15,7 +15,7 @@ export class App extends React.PureComponent<AppProps, AppState> {
             <RendererProvider renderer={this.props.fela_renderer}>
                 <ThemeProvider theme={{ main_color: '#1d3c8d' }}>
                     <React.Fragment>
-                        <FelaComponent as="h3" style={{ color: 'firebrick' }}>Welcome back!</FelaComponent>
+                        <FelaComponent as="h1" style={{ color: 'firebrick' }}>Welcome back!</FelaComponent>
                         <div>Fancy that this still works?</div>
                     </React.Fragment>
                 </ThemeProvider>
