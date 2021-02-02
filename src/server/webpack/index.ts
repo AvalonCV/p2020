@@ -33,16 +33,18 @@ export const initDevMiddleware = (app: express.Express) => {
 
 	const compiler = webpack(webpack_configuration);
 	const client_compiler = compiler.compilers.find(current_compiler => current_compiler.name === 'client');
-	const dev_middleware = webpackDevMiddleware(compiler, {
+
+	app.use(webpackDevMiddleware(compiler as any, {
 		publicPath: getPublicPath(getWebpackConfigurationOfType('client', webpack_configuration)),
 		serverSideRender: true
-	});
-	app.use(dev_middleware);
+	}));
+
 
 	// NOTE: Only the client bundle needs to be passed to`webpack-hot-middleware`.
 	if (client_compiler) {
 		app.use(webpackHotMiddleware(client_compiler, {}));
 	}
+
 	app.use(webpackHotServerMiddleware(compiler));
 
 	return app;

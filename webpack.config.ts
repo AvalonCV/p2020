@@ -38,7 +38,7 @@ export default function (env: CustomProcessEnv = process.env): CustomWebpackConf
 			extensions: ['.ts', '.tsx', '.js', '.json'],
 		},
 		resolveLoader: {
-			alias: { 'favicon-loader': path.resolve(process.cwd(), 'node_modules/favicons-webpack-plugin/src/loader.js') },
+			alias: { 'favicon-loader': path.resolve(process.cwd(), 'src/server/webpack/faviconLoader.ts') },
 			modules: ['node_modules']
 		},
 		module: {
@@ -78,7 +78,6 @@ export default function (env: CustomProcessEnv = process.env): CustomWebpackConf
 							prefix: '',
 							options: ''
 						})
-
 					}]
 				},
 				{
