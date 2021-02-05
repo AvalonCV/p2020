@@ -7,8 +7,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { App } from './../app/App';
 
-import favicon from './../app/images/favicon.png';
-console.log('favicon', favicon);
+import favicon_html from './../app/images/favicon.png';
 
 import { createRenderer, } from 'fela';
 import { renderToMarkup } from 'fela-dom';
@@ -93,6 +92,7 @@ export default function serverRenderer() {
                 <meta http-equiv="X-UA-Compatible" content="IE=edge">
                 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
                 <meta name="theme-color" content="#1d3c8d">
+                ${favicon_html}
 
                 ${renderToMarkup(fela_renderer)}
             </head>

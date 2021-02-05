@@ -2,12 +2,6 @@ import path from 'path';
 import webpack from 'webpack';
 import WebpackNodeExternals from 'webpack-node-externals';
 
-import querystring from 'querystring';
-
-// const favicon_loader = require(path.resolve(process.cwd(), 'node_modules/favicons-webpack-plugin/src/loader.js'));
-// console.log('favicon_loader', favicon_loader);
-// import { convertWebpackFaviconsToMarkupPlugin } from './src/server/webpack/convertWebpackFaviconsToMarkupPlugin';
-
 
 export interface CustomWebpackConfiguration extends webpack.Configuration {
 	name: '' | 'server' | 'client';
@@ -72,12 +66,11 @@ export default function (env: CustomProcessEnv = process.env): CustomWebpackConf
 					test: /favicon\.png$/,
 					use: [{
 						loader: 'favicon-loader',
-						options: querystring.stringify({
+						options: {
 							path: '/',
 							outputPath: public_path,
 							prefix: '',
-							options: ''
-						})
+						}
 					}]
 				},
 				{

@@ -287,6 +287,7 @@ const loader: WebpackLoader = function (this, content) {
         this.addDependency(this.resourcePath);
 
         const options = getOptions(this) || {};
+
         const { emitFile = true, context } = options;
         const callback = this.async();
 
@@ -306,7 +307,7 @@ const loader: WebpackLoader = function (this, content) {
         favicons(content, favicon_configuration)
             .then(response => {
                 const complete_html = response.html.reduce((result, current_html) => {
-                    return result + '' + current_html.replace(/(.*?href=)(.*)/, `$1' + __webpack_public_path__ + '$2 `);
+                    return result + '' + current_html.replace(/(.*?href=")\/?(.*)/, `$1' + __webpack_public_path__ + '$2 `);
                 }, '');
                 let result = `module.exports = '${complete_html}';`;
 

@@ -8,6 +8,7 @@ body {
 	color: #4d4d4d;
 	line-height: 1.4;
 	overflow-y: scroll;
+	overflow-anchor: none;
 }
 #root {
 	min-height: 100vh;
